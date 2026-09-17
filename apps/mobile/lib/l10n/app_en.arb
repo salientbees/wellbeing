@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "appTitle": "Wellbeing",
+  "home": "Home",
+  "track": "Track",
+  "coach": "Coach",
+  "progress": "Progress",
+  "plan": "Plan",
+  "welcome": "Welcome to Wellbeing",
+  "welcomeBody": "A private space to understand your daily wellbeing, one day at a time.",
+  "foundationNotice": "This early version does not yet save entries or connect to your account.",
+  "trackTitle": "Your daily wellbeing",
+  "trackBody": "Your daily entries will belong here. Tracking is not available in this version yet.",
+  "coachTitle": "A little space to reflect",
+  "coachBody": "Coaching is not connected yet. When available, you can choose whether to share your data with the coach.",
+  "progressTitle": "Your story over time",
+  "progressBody": "There is no history to show yet. Progress will be based on your recorded entries.",
+  "planTitle": "Make room for yourself",
+  "planBody": "Planning and reminders are not available in this version yet.",
+  "notFound": "This page is not available."
+}
