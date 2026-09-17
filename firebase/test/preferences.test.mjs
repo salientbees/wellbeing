@@ -38,9 +38,9 @@ test('preferences are revision-safe, idempotent, isolated and delivered through 
   assert.equal(revoked.account.consents.aiProcessing, false);
   assert.equal(revoked.account.consents.memory, false);
   assert.equal(revoked.account.dataEpoch, 4);
-  assert.equal((await repo.root.collection('jobs').get()).size, 3);
+  assert.equal((await db.collection('jobs').where('ownerUid', '==', repo.principal.uid).get()).size, 3);
   await updatePreferences(repo, 'consents', revoke);
-  assert.equal((await repo.root.collection('jobs').get()).size, 3);
+  assert.equal((await db.collection('jobs').where('ownerUid', '==', repo.principal.uid).get()).size, 3);
   const snapshot = await repo.snapshot();
   assert.equal(snapshot.startSeq, 4);
 });

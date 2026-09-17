@@ -48,9 +48,9 @@ export async function updatePreferences(repository: UserRepository, kind: 'profi
       }
       // Durable invalidation intent; every future AI publisher/controller must
       // also read current consent/epoch, so worker lag cannot authorize output.
-      tx.create(root.collection('jobs').doc(`consent_${value.operationId}`), {
-        type: 'consentInvalidation', state: 'pending', targetEpoch: epoch,
-        createdAt: timestamp, dueAt: timestamp, attempts: 0,
+      tx.create(repository.db.collection('jobs').doc(`consent_${createHash('sha256').update(`${repository.principal.uid}:${value.operationId}`).digest('hex')}`), {
+        ownerUid: repository.principal.uid, type: 'consentInvalidation', status: 'pending', payload: { targetEpoch: epoch },
+        createdAt: timestamp, nextAttemptAt: timestamp, attempt: 0, expiresAt: Timestamp.fromMillis(now.getTime() + 7 * 86400_000),
       });
     } else if ('changes' in value) {
       const { revision: _revision, schemaVersion: _schema, createdAt: _created, updatedAt: _updated, ...existing } = current!;

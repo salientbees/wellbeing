@@ -92,3 +92,14 @@ Implemented editable preferred name, IANA timezone and coaching tone; theme/redu
 The expanded Android test passed sign-in, hydration entry, profile editing, AI/memory grants, AI revocation with memory switched off, and sign-out. Flutter tests cover immutable preference retries, 200% text layout and hidden progress metrics. Emulator tests cover concurrent identical requests, conflicting revisions, strict field rejection, sync delivery and revocation during export. This is a completed local feature slice; P2 as a whole remains incomplete until privacy export/erasure and the documented security/device gates pass.
 
 Next engineering milestone: durable privacy jobs and the independent deletion-recovery ledger, followed by export/erasure workers and their failure/recovery tests. Cloud provisioning and iOS execution remain isolated external release gates, not reasons to stop local implementation.
+
+
+## Privacy infrastructure milestone (18 September 2026)
+
+The validated initial commit was pushed to `origin/main` after owner authentication. The next backend slice adds the documented global job queue with bounded batches, transactionally fenced leases, crash reclamation, bounded jittered retries and terminal-state removal from due queries. Consent invalidation now uses this canonical global queue rather than a separate per-account queue.
+
+Record-erasure admission validates bounded typed selectors and recent authentication. It atomically installs logical exclusion, advances the data epoch, records the privacy job and recovery-ledger outbox, and withholds acceptance until the independent Storage manifest is durable and acknowledged. Ambiguous acknowledgement is retried with the same operation ID; manifests contain keyed owner identifiers and selectors, never health values. The Storage adapter refuses a mismatched existing manifest and requests generation-match-zero on creation.
+
+Tests cover expired/concurrent leases, retry limits, lost recovery acknowledgement, persistent logical exclusion, idempotent admission, selector rejection, keyed owner matching and Storage replay mismatch. Firebase Storage emulator testing revealed it does not enforce the tested generation precondition; production atomic-creation behavior is represented by a deterministic adapter race test and still needs a real bucket gate. See [Cloud Storage preconditions](https://docs.cloud.google.com/storage/docs/request-preconditions). No cloud bucket was provisioned.
+
+Erasure admission is intentionally an internal module until bounded dependent-artifact cleanup, reconciliation, sync tombstones and restore replay are connected. The existing delete API still fails closed; this milestone does not claim completed user erasure. Recovery bucket IAM/retention, HMAC key version custody and backup inventory must be verified before production enablement. These external gates do not prevent further local worker implementation.
